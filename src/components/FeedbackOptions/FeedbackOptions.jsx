@@ -3,9 +3,10 @@ import { Button } from './FeedbackOptions_css';
 import PropTypes from 'prop-types';
 
 export const FeedbackOptions = ({ options, onLeaveFeedback }) => {
-        return (
-          Object.keys(options).map(item => (<Button type="button" key={item} id={item} onClick={onLeaveFeedback}>{item}</Button>)) )
-    };
+  return (
+    Object.keys(options).splice(0, 3).map(item => <Button type="button" key={item} id={item} onClick={onLeaveFeedback}>{item}</Button>)
+    )
+};
 
 FeedbackOptions.propTypes = {
   options: PropTypes.shape({
