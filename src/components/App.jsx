@@ -28,16 +28,9 @@ function reducer(state, action) {
 
 export function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  // const [total, setTotal] = useState(0);
-  // const [positiveFeedback, setPositiveFeedback] = useState(0);
-
 
   const handleFidback = ({ target }) => {
     dispatch({type: target.id})}
-  
-  // useEffect(()=> {setTotal((Object.values(state)).reduce((acc, item) => {return acc + item}, 0))},[state.good, state.bad, state.neutral])
-
-  // useEffect(()=> {setPositiveFeedback((Math.round(state.good / total * 100) ) || 0)},[state.good, total])
     
     return (
       <>
