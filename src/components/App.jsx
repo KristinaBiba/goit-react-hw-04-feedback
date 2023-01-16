@@ -1,48 +1,51 @@
-import { useReducer } from "react";
+import { useState } from "react";
 
 import { Section } from './Section/Section';
 import { Statistics } from "./Statistics/Statistics";
 import { FeedbackOptions } from './FeedbackOptions/FeedbackOptions';
 import { Notification } from './Notification/Notification';
+import { useEffect } from "react";
 
-const initialState = {
-  good: 0,
-  neutral: 0,
-  bad: 0,
-  total: 0,
-  positiveFeedback: 0,
-};
+export function App() {
 
-function reducer(state, action) {
-  switch (action.type) {
-    case 'good':
-      return {...state, good: state.good + 1, total: state.total + 1, positiveFeedback: ((Math.round((state.good + 1) / (state.total + 1) * 100) ) || 0)};
-    case 'neutral':
-      return {...state,  neutral: state.neutral + 1, total: state.total + 1, positiveFeedback: ((Math.round((state.good) / (state.total + 1) * 100) ) || 0) };
-    case 'bad':
-      return { ...state, bad: state.bad + 1,  total: state.total + 1, positiveFeedback: ((Math.round((state.good) / (state.total + 1) * 100) ) || 0)};
+  const [good, setGood] = useState(0);
+  const [bad, setBad] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [positiveFeedback, setPositiveFeedback] = useState(0);
+
+  const handleFidback = ({ target }) => {
+    switch (target.id) {
+      case 'good':
+        setGood(good + 1);
+        return;
+      case 'neutral':
+        setNeutral(neutral + 1);
+        return;
+      case 'bad':
+        setBad(bad + 1);
+      return;
     default:
       throw new Error();
   }
-}
+  };
 
-export function App() {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  const handleFidback = ({ target }) => {
-    dispatch({type: target.id})}
+  useEffect(() => {
+    setTotal(good + bad + neutral);
+    setPositiveFeedback(((Math.round((good) / (good + bad + neutral) * 100)) || 0))
+  }, [good, bad, neutral]);
     
     return (
       <>
         <Section title="Please leave feedback">
-          <FeedbackOptions options={state} onLeaveFeedback={handleFidback}></FeedbackOptions>
+          <FeedbackOptions options={{good, bad, neutral}} onLeaveFeedback={handleFidback}></FeedbackOptions>
         </Section>
           
 
         <Section title="Statistics">
 
-          {(state.total !== 0) ?
-          (<Statistics good={state.good} neutral={state.neutral} bad={state.bad} total={state.total} positivePercentage={state.positiveFeedback} />) :
+          {(total !== 0) ?
+          (<Statistics good={good} neutral={neutral} bad={bad} total={total} positivePercentage={positiveFeedback} />) :
           (<Notification message="There is no feedback"></Notification>)}
           
         </Section>       
